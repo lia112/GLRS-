@@ -16,6 +16,7 @@ void  Insertion_sort() {
     }
 }
 
+
 //merge_sort
 void Merge(int* a, int p, int q, int r)
 {
@@ -56,3 +57,80 @@ void merge_sort(int* a, int l, int r)
         Merge(a, l, m, r);
     }
 }
+
+
+
+int random_s(int l, int r) {
+	unsigned seed = chrono::high_resolution_clock::now().time_since_epoch().count();
+	mt19937 rand_generator(seed);
+	uniform_int_distribution<int> dist(l, r);
+	return dist(rand_generator);
+}
+
+
+
+int partition(int* arr, int p, int r) {
+	int x = arr[r];
+	int i = p - 1;
+	for (int j = p; j < r; j++) {
+		if (arr[j] <= x) {
+			i++;
+			swap(arr[i], arr[j]);
+			cnt++;
+		}
+	}
+	swap(arr[i + 1], arr[r]);
+	cnt++;
+	return i + 1;
+}
+
+void Quick_sort(int* arr, int p, int r) {
+	if (p < r) {
+		int q = partition(arr, p, r);
+		Quick_sort(arr, p, q - 1);
+		Quick_sort(arr, q + 1, r);
+	}
+}
+
+//随机化快排
+int Randomized_Partition(int* arr, int p, int r) {
+	int i = random_s(p, r);
+	swap(arr[r], arr[i]);
+	cnt++;
+	return partition(arr, p, r);
+}
+
+void Randomized_Sort(int* arr, int p, int r) {
+	if (p < r) {
+		int q = Randomized_Partition(arr, p, r);
+		Randomized_Sort(arr, p, q - 1);
+		Randomized_Sort(arr, q+1,r);
+
+	}
+}
+
+//hoare
+int Hoare_partition(int* arr, int p, int r) {
+	int x = arr[p];
+	int i = p - 1;
+	int j = r + 1;
+	while (1) {
+		while (arr[j] > x) j--;
+		while (arr[i] < x)i++;
+		if (i < j) {
+			swap(arr[i], arr[j]);
+			cnt++;
+		}
+		else return j;
+	}
+}
+
+void Hoare_QSort(int* arr, int p, int r) {
+	if (p < r) {
+		int q = Hoare_partition(arr, p, r);
+		Hoare_QSort(arr, p, q - 1);
+		Hoare_QSort(arr, q + 1, r);
+
+	}
+}
+
